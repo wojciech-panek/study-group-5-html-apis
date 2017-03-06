@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router';
-import Home from './home.component';
+import Slave from './slave.component';
 
 export default (
-  <Route component={Home} />
+  <Route path="slave" component={Slave} />
 );
