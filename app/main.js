@@ -3,8 +3,8 @@ import './src/main.scss';
 import 'babel-polyfill';
 
 import React from 'react';
-import {render, unmountComponentAtNode} from 'react-dom';
-import {Router, browserHistory} from 'react-router';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 

@@ -1,11 +1,14 @@
 import React from 'react';
-import {Route} from 'react-router';
+import { Route, IndexRoute } from 'react-router';
 
 import App from './app.component';
-import HomeRoute from './home';
+
+import Master from '../components/master';
+import Slave from '../components/slave';
 
 export default (
   <Route path="/" component={App}>
-    {HomeRoute}
+    <IndexRoute component={Slave} />
+    <Route path="master" component={Master} />
   </Route>
 );
