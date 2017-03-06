@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {connect, socket, disconnect} from '../../services/webSocketService'
+import React, { Component } from 'react';
+import { connect, socket, disconnect } from '../../services/webSocketService'
 
 export default class App extends Component {
 
