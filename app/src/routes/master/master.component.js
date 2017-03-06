@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 import { browserHistory } from 'react-router';
-import {connect, socket, disconnect, send} from '../../services/webSocketService'
-
-navigator.getUserMedia  = navigator.getUserMedia ||
-  navigator.webkitGetUserMedia ||
-  navigator.mozGetUserMedia ||
-  navigator.msGetUserMedia;
-
+import {connect, socket, disconnect, send} from '../../services/webSocketService';
+import {userMedia} from '../../services/userMediaService';
 
 
 export default class App extends Component {
@@ -30,8 +25,8 @@ export default class App extends Component {
       console.log('Closing connection');
     };
 
-    if (navigator.getUserMedia) {
-      navigator.getUserMedia({audio: true, video: false}, function(stream) {
+    if (userMedia) {
+      userMedia({audio: true, video: false}, stream => {
         send(stream);
       }, (err) => {
         console.log(err);
