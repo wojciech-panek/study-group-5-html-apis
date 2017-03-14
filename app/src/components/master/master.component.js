@@ -24,6 +24,7 @@ export default class Master extends Component {
     this.onConnectionError = this.onConnectionError.bind(this);
     this.onMessageReceive = this.onMessageReceive.bind(this);
     this.authorizeMaster = this.authorizeMaster.bind(this);
+    this.sendClientData = this.sendClientData.bind(this);
   }
 
   componentDidMount() {
@@ -38,6 +39,23 @@ export default class Master extends Component {
     this.socket = connect();
   }
 
+  disconnect() {
+    disconnect();
+  }
+
+  onMessageReceive(data) {
+    const json = JSON.parse(data);
+    const {type} = json;
+    const {AUTHORIZE_MASTER_SUCCESS, AUTHORIZE_MASTER_ERROR} = requestsTypes;
+
+    if (type === AUTHORIZE_MASTER_ERROR) {
+      this.setState({error: AUTHORIZE_MASTER_ERROR});
+      this.disconnect();
+    } else if (type === AUTHORIZE_MASTER_SUCCESS) {
+      this.setState({master: {authorized: true}});
+    }
+  }
+
   onConnectionOpen() {
     this.setState({connected: true});
     this.authorizeMaster();
@@ -49,6 +67,12 @@ export default class Master extends Component {
 
   onConnectionError(err) {
     this.setState({error: err, connected: false});
+  }
+
+  sendClientData(data) {
+    const {CLIENTS_DATA} = requestsTypes;
+    const json = JSON.stringify({type: CLIENTS_DATA, data});
+    this.send(json);
   }
 
   send(data) {
@@ -68,25 +92,9 @@ export default class Master extends Component {
     this.send(data);
   }
 
-  onMessageReceive(data) {
-    const json = JSON.parse(data);
-    const {type} = json;
-    const {AUTHORIZE_MASTER_SUCCESS, AUTHORIZE_MASTER_ERROR} = requestsTypes;
-
-    if (type === AUTHORIZE_MASTER_ERROR) {
-      this.setState({error: AUTHORIZE_MASTER_ERROR});
-      this.disconnect();
-    } else if (type === AUTHORIZE_MASTER_SUCCESS) {
-      this.setState({master: {authorized: true}});
-    }
-  }
-
-  disconnect() {
-    disconnect();
-  }
-
   componentWillUnmount() {
     this.socket = null;
+    this.disconnect();
   }
 
   get isConnected() {
@@ -110,6 +118,8 @@ export default class Master extends Component {
         <div className="master__info-wrapper">
           <strong className="master__info">You are master!</strong>
         </div>}
+
+        <button onClick={() => this.sendClientData({test: 'test'})}>Sent test data</button>
       </div>
     );
   }

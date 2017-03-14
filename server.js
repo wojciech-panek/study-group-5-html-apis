@@ -4,7 +4,7 @@ const requestsTypes = {
   AUTHORIZE_MASTER: 'AUTHORIZE_MASTER',
   AUTHORIZE_MASTER_SUCCESS: 'AUTHORIZE_MASTER_SUCCESS',
   AUTHORIZE_MASTER_ERROR: 'AUTHORIZE_MASTER_ERROR',
-  VIBRATE_DATA: 'VIBRATE_DATA'
+  CLIENTS_DATA: 'CLIENTS_DATA'
 };
 
 let master = {
@@ -15,18 +15,22 @@ let master = {
 const port = 8001;
 const server = ws.createServer(conn => {
   const {key} = conn;
+  const {AUTHORIZE_MASTER, AUTHORIZE_MASTER_SUCCESS, AUTHORIZE_MASTER_ERROR, CLIENTS_DATA} = requestsTypes;
 
   conn.on('text', data => {
     const json = JSON.parse(data);
     const {type} = json;
-    if (type === requestsTypes.AUTHORIZE_MASTER) {
+    if (type === AUTHORIZE_MASTER) {
       const {id} = json;
       const masterAuthorized = isMasterAuthorized(id, key);
       if (masterAuthorized) {
-        conn.send(JSON.stringify({type: requestsTypes.AUTHORIZE_MASTER_SUCCESS}));
+        conn.send(JSON.stringify({type: AUTHORIZE_MASTER_SUCCESS}));
       } else {
-        conn.send(JSON.stringify({type: requestsTypes.AUTHORIZE_MASTER_ERROR}));
+        conn.send(JSON.stringify({type: AUTHORIZE_MASTER_ERROR}));
       }
+    }
+    if (type === CLIENTS_DATA) {
+      broadcast(server, data);
     }
   });
 
@@ -39,6 +43,12 @@ const server = ws.createServer(conn => {
   });
 
 }).listen(port);
+
+function broadcast(server, msg) {
+  server.connections.forEach(conn => {
+    conn.sendText(msg);
+  });
+}
 
 function clearMaster() {
   master = {

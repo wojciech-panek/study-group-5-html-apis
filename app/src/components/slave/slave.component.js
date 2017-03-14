@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect, disconnect, requestsTypes} from '../../services/webSocketService';
 import {Scene, PerspectiveCamera, WebGLRenderer, Color,
   SphereGeometry, MeshToonMaterial, Mesh, PointLight} from 'three';
 
@@ -6,6 +7,9 @@ export default class Slave extends Component {
   constructor(props) {
     super(props);
     this.renderLoop = this.renderLoop.bind(this);
+    this.connect = this.connect.bind(this);
+    this.disconnect = this.disconnect.bind(this);
+    this.onMessageReceive = this.onMessageReceive.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +35,32 @@ export default class Slave extends Component {
 
     this.createObjects();
     this.renderLoop();
+
+    this.socket = connect();
+    this.socket.onmessage = ({data}) => this.onMessageReceive(data);
+  }
+
+  componentWillUnmount() {
+    this.socket = null;
+    this.disconnect();
+  }
+
+  connect() {
+    this.socket = connect();
+  }
+
+  disconnect() {
+    disconnect();
+  }
+
+  onMessageReceive(data) {
+    const json = JSON.parse(data);
+    const {type} = json;
+    const {CLIENTS_DATA} = requestsTypes;
+
+    if (type === CLIENTS_DATA) {
+      console.log(json);
+    }
   }
 
   renderLoop() {
