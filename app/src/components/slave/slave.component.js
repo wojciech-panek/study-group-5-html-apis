@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Scene, PerspectiveCamera, WebGLRenderer, Color,
-  SphereGeometry, MeshToonMaterial, Mesh, PointLight } from 'three';
+import React, {Component} from 'react';
+import {Scene, PerspectiveCamera, WebGLRenderer, Color,
+  SphereGeometry, MeshToonMaterial, Mesh, PointLight} from 'three';
 
 export default class Slave extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ export default class Slave extends Component {
   componentDidMount() {
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-    this.renderer = new WebGLRenderer({ antialias: true });
+    this.renderer = new WebGLRenderer({antialias: true});
 
     let dpr = 1;
     if (window.devicePixelRatio) {
@@ -41,7 +41,7 @@ export default class Slave extends Component {
 
   createObjects() {
     const geometry = new SphereGeometry(1, 25, 25);
-    const material = new MeshToonMaterial({ color: 0x2e7cd3 });
+    const material = new MeshToonMaterial({color: 0x2e7cd3});
 
     this.sphere = new Mesh(geometry, material);
     this.scene.add(this.sphere);
