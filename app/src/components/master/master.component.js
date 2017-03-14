@@ -73,10 +73,10 @@ export default class Master extends Component {
     const {type} = json;
     const {AUTHORIZE_MASTER_SUCCESS, AUTHORIZE_MASTER_ERROR} = requestsTypes;
 
-    if(type === AUTHORIZE_MASTER_ERROR) {
+    if (type === AUTHORIZE_MASTER_ERROR) {
       this.setState({error: AUTHORIZE_MASTER_ERROR});
       this.disconnect();
-    } else if(type === AUTHORIZE_MASTER_SUCCESS) {
+    } else if (type === AUTHORIZE_MASTER_SUCCESS) {
       this.setState({master: {authorized: true}});
     }
   }
