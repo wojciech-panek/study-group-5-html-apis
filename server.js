@@ -29,7 +29,7 @@ const server = ws.createServer(conn => {
         conn.send(JSON.stringify({type: AUTHORIZE_MASTER_ERROR}));
       }
     }
-    if (type === CLIENTS_DATA) {
+    if (type === CLIENTS_DATA && key === master.conn) {
       broadcast(server, data);
     }
   });
