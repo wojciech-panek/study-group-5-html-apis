@@ -1,9 +1,9 @@
 export default {
   api: {
-    baseURL: '/api'
+    baseURL: '/api',
   },
   googleAnalytics: {
     clientID: '',
-    options: {}
-  }
+    options: {},
+  },
 };

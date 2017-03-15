@@ -4,6 +4,6 @@ import base from './base';
 
 export default defaultsDeep({
   googleAnalytics: {
-    clientID: ''
-  }
+    clientID: '',
+  },
 }, base);

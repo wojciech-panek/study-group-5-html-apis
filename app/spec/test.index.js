@@ -1,9 +1,9 @@
 import 'babel-polyfill';
-import {resolve} from 'path';
+import { resolve } from 'path';
 import assert from 'assert';
 import Module from 'module';
 import chai from 'chai';
-import {jsdom} from 'jsdom';
+import { jsdom } from 'jsdom';
 import path from 'path';
 
 chai.config.includeStack = true;
@@ -13,7 +13,7 @@ const aliases = {
   'TimelineLite': './node_modules/gsap/src/uncompressed/TimelineLite.js',
   'EasePack': './node_modules/gsap/src/uncompressed/easing/EasePack.js',
   'babylonjs': './app/spec/mocks/babylonjs.js',
-  'create-reducer': path.join(process.cwd(), 'app/src/utils/createReducer.js')
+  'create-reducer': path.join(process.cwd(), 'app/src/utils/createReducer.js'),
 };
 
 Module.prototype.require = function (path) {
@@ -45,5 +45,5 @@ Object.keys(document.defaultView).forEach((property) => {
 });
 
 global.navigator = {
-  userAgent: 'node.js'
+  userAgent: 'node.js',
 };

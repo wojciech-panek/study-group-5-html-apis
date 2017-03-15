@@ -1,12 +1,11 @@
+import 'babel-polyfill';
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import './src/main.scss';
 
-import 'babel-polyfill';
-
-import React from 'react';
-import {render, unmountComponentAtNode} from 'react-dom';
-import {Router, browserHistory} from 'react-router';
-
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
 // Check this repo:
@@ -19,7 +18,7 @@ function renderApp() {
   const routes = require('./src/routes').default;
 
   render(
-    <Router history={browserHistory} routes={routes}/>,
+    <Router history={browserHistory} routes={routes} />,
     reactRoot
   );
 }

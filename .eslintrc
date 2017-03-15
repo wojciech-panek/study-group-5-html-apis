@@ -1,5 +1,5 @@
 {
-  "extends": "apptension",
+  "extends": "apptension-react",
   "plugins": [
     "react"
   ],

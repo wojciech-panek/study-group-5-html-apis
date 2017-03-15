@@ -5,7 +5,7 @@ import base from './base';
 export default defaultsDeep({
   googleAnalytics: {
     options: {
-      debug: true
-    }
-  }
+      debug: true,
+    },
+  },
 }, base);

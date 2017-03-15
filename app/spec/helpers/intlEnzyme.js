@@ -6,23 +6,23 @@
  */
 
 import React from 'react';
-import {IntlProvider, intlShape} from 'react-intl';
-import {mount, shallow} from 'enzyme';
+import { IntlProvider, intlShape } from 'react-intl';
+import { mount, shallow } from 'enzyme';
 
 // You can pass your messages to the IntlProvider. Optional: remove if unneeded.
 import en from '../../src/translations/en.json';
-import {unpath} from '../src/modules/utils';
+import { unpath } from '../src/modules/utils';
 const messages = unpath(en);
 
 // Create the IntlProvider to retrieve context for wrapping around.
-const intlProvider = new IntlProvider({locale: 'en', messages}, {});
-const {intl} = intlProvider.getChildContext();
+const intlProvider = new IntlProvider({ locale: 'en', messages }, {});
+const { intl } = intlProvider.getChildContext();
 
 /**
  * When using React-Intl `injectIntl` on components, props.intl is required.
  */
 export function injectIntlProp(node) {
-  return React.cloneElement(node, {intl});
+  return React.cloneElement(node, { intl });
 }
 
 export function shallowWithIntl(node, options = {}) {
@@ -32,8 +32,8 @@ export function shallowWithIntl(node, options = {}) {
       ...options,
       context: {
         intl,
-        ...options.context
-      }
+        ...options.context,
+      },
     }
   );
 }
@@ -43,11 +43,11 @@ export function mountWithIntl(element, options = {}) {
     ...options,
     context: {
       intl,
-      ...options.context
+      ...options.context,
     },
     childContextTypes: {
       intl: intlShape,
-      ...options.childContextTypes
-    }
+      ...options.childContextTypes,
+    },
   });
 }
