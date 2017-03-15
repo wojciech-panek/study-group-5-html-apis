@@ -45,7 +45,7 @@ export default class AudioLoader extends Component {
     this.stop();
 
     this.audioAnalyser.connect(this.audioContext.destination);
-    this.audioAnalyser.fftSize = 64;
+    this.audioAnalyser.fftSize = 32;
 
     this.frequencyData = new Uint8Array(this.audioAnalyser.frequencyBinCount);
 
