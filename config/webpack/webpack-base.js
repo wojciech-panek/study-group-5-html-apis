@@ -35,6 +35,7 @@ export default [
    */
   addJSONLoader,
   addCommonStaticFilesLoader,
+  addLoader({ test: /\.mp3/, loader: "file-loader" }),
 
   /**
    * Index file generating

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import uuid from 'uuid/v4';
 
 import { connect, disconnect, send, requestsTypes } from '../../services/webSocketService';
-
+import AudioLoader from './audioLoader/audioLoader.component';
 
 export default class Master extends Component {
 
@@ -84,7 +84,7 @@ export default class Master extends Component {
   render() {
     const { error, master } = this.state;
     return (
-      <div className="master__content">
+      <div className="master">
         <div className="master__status-wrapper">
           <strong className="master__status">You are: {this.isConnected}</strong>
         </div>
@@ -99,7 +99,7 @@ export default class Master extends Component {
           <strong className="master__info">You are master!</strong>
         </div>}
 
-        <button onClick={() => this.sendClientData({ test: 'test' })}>Sent test data</button>
+        <AudioLoader onAudioDataChange={this.sendClientData} />
       </div>
     );
   }

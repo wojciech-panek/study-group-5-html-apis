@@ -53,7 +53,7 @@ export default class Slave extends Component {
     const { CLIENTS_DATA } = requestsTypes;
 
     if (type === CLIENTS_DATA) {
-      console.log(json);
+      console.log(json.data);
     }
   };
 

@@ -5,7 +5,6 @@ export default class App extends Component {
     children: PropTypes.node,
   };
 
-
   render() {
     return (
       <div className="app">
