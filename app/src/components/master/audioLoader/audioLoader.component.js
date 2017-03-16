@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 
 
 const FREQUENCY = 50;
+const AUDIO_SOURCE = 'audio';
+const MICROPHONE_SOURCE = 'microphone';
 
 export default class AudioLoader extends Component {
   static propTypes = {
@@ -14,40 +16,57 @@ export default class AudioLoader extends Component {
     this.audioContext = new AudioContext();
     this.audioAnalyser = this.audioContext.createAnalyser();
     this.audioSource = null;
-    this.frequencyData = null;
-    this.stream = null;
+    this.audioFrequencyData = null;
 
+    this.microphoneContext = new AudioContext();
+    this.microphoneAnalyser = this.microphoneContext.createAnalyser();
+    this.microphoneSource = null;
+    this.microphoneFrequencyData = null;
+
+    this.stream = null;
     this.timeout = null;
+
+    this.activeSource = '';
   }
 
   handlePlay = () => {
-    this.audioSource = this.audioContext.createMediaElementSource(this.audioNode);
-    this.audioSource.connect(this.audioAnalyser);
+    if (!this.audioSource) {
+      this.audioSource = this.audioContext.createMediaElementSource(this.audioNode);
+      this.audioSource.connect(this.audioAnalyser);
 
-    this.start();
+      this.audioAnalyser.connect(this.audioContext.destination);
+      this.audioAnalyser.fftSize = 32;
+
+      this.audioFrequencyData = new Uint8Array(this.audioAnalyser.frequencyBinCount);
+    }
+    this.start(AUDIO_SOURCE);
   };
 
   startRecording = () => {
-    if (!this.stream) {
-      navigator.getUserMedia({ audio: true }, (stream) => {
-        this.stream = stream;
-        this.audioSource = this.audioContext.createMediaStreamSource(this.stream);
-        this.audioSource.connect(this.audioAnalyser);
+    navigator.getUserMedia({ audio: true }, (stream) => {
+      this.stream = stream;
+      this.microphoneSource = this.microphoneContext.createMediaStreamSource(this.stream);
+      this.microphoneSource.connect(this.microphoneAnalyser);
 
-        this.start();
-      }, () => {});
-    } else {
-      this.start();
-    }
+      this.microphoneAnalyser.connect(this.microphoneContext.destination);
+      this.microphoneAnalyser.fftSize = 32;
+
+      this.microphoneFrequencyData = new Uint8Array(this.microphoneAnalyser.frequencyBinCount);
+
+      this.start(MICROPHONE_SOURCE);
+    }, () => {});
   };
 
-  start = () => {
+  stopRecording = () => {
+    this.stream.getTracks().forEach(track => track.stop());
+
+    this.stop();
+  };
+
+  start = (activeSource) => {
     this.stop();
 
-    this.audioAnalyser.connect(this.audioContext.destination);
-    this.audioAnalyser.fftSize = 32;
-
-    this.frequencyData = new Uint8Array(this.audioAnalyser.frequencyBinCount);
+    this.activeSource = activeSource;
 
     this.sendFrequencyData();
   };
@@ -60,9 +79,10 @@ export default class AudioLoader extends Component {
   };
 
   sendFrequencyData = () => {
-    this.audioAnalyser.getByteFrequencyData(this.frequencyData);
+    this[`${this.activeSource}Analyser`].getByteFrequencyData(this[`${this.activeSource}FrequencyData`]);
 
-    this.props.onAudioDataChange(this.frequencyData);
+    this.props.onAudioDataChange(this[`${this.activeSource}FrequencyData`]);
+    console.log(this[`${this.activeSource}FrequencyData`]);
     this.timeout = setTimeout(() => {
       this.sendFrequencyData();
     }, FREQUENCY);
@@ -83,7 +103,7 @@ export default class AudioLoader extends Component {
         <div>
           <h2>Microphone:</h2>
           <button onClick={this.startRecording}>Start recording</button>
-          <button onClick={this.stop}>Stop recording</button>
+          <button onClick={this.stopRecording}>Stop recording</button>
         </div>
       </div>
     );
