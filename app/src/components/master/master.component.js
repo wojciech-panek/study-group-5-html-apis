@@ -82,6 +82,14 @@ export default class Master extends Component {
   }
 
   render() {
+    if (window.location.hostname !== 'localhost') {
+      return (
+        <div className="master">
+          Not on localhost!
+        </div>
+      );
+    }
+
     const { error, master } = this.state;
     return (
       <div className="master">
