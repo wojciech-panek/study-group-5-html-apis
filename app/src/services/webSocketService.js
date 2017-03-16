@@ -13,7 +13,7 @@ export const send = (data) => {
 
 export const connect = () => {
   if ('WebSocket' in window) {
-    socket = new WebSocket('ws://localhost:8001');
+    socket = new WebSocket(`ws://${window.location.hostname}:8001`);
     return socket;
   }
   return null;
